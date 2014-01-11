@@ -6,6 +6,8 @@
 
 package snakegame;
 
+import environment.ApplicationStarter;
+
 /**
  *
  * @author Adriaan D
@@ -20,6 +22,7 @@ public class SnakeGame {
     }
 
     private static void start() {
+        ApplicationStarter.run("Game", new SnakeEnvironment());
     }
     
 }
