@@ -46,7 +46,7 @@ public class Snake {
     }
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
-    private ArrayList<Point> body;
+    private ArrayList<Point> body = new ArrayList<Point>();
     private Direction direction = Direction.LEFT;
     private int growthCount = 0;
 
