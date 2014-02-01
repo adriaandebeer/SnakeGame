@@ -10,6 +10,7 @@ import environment.Environment;
 import environment.GraphicsPalette;
 import environment.Grid;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -38,7 +39,7 @@ class SnakeEnvironment extends Environment {
     public void initializeEnvironment() {
         this.grid = new Grid();
         this.grid.getPosition().x = 50;
-        this.grid.getPosition().y = 100;
+        this.grid.getPosition().y = 400;
 
         this.grid.setColor(Color.black);
         this.grid.setCellHeight(15);
@@ -108,8 +109,45 @@ class SnakeEnvironment extends Environment {
     public void environmentMouseClicked(MouseEvent e) {
     }
 
+       
+    private void drawHelmet(Graphics graphics, Color color, Point position, Dimension size){
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(position.x, position.y, size.width, size.height);
+        
+        //draw first part of faceplate
+        graphics.setColor(color);
+        graphics.fillRect(position.x + (size.width * 3 / 20), position.y + (size.height * 1 / 20), (size.width * 14 / 20), (size.height * 14 / 20));
+        //bottom chin guard
+        int[] xPoints = {position.x + (size.width * 3 / 20), position.x + (size.width * 10 / 20), position.x + (size.width * 17 / 20)};
+        int[] yPoints = {position.y + (size.height * 15 / 20), position.y + (size.height * 20 / 20), position.y + (size.height * 15 / 20)};
+        graphics.fillPolygon(xPoints, yPoints, 3);
+        
+        graphics.setColor(Color.white);
+        graphics.fillRect(position.x + (size.width * 8 / 20), position.y + (size.height * 1 / 20), size.width * 4 / 20, size.height * 11 / 20);
+        graphics.fillRect(position.x + (size.width * 3 / 20), position.y + (size.height * 11 / 20), size.width * 14 / 20, size.height * 4 / 20);
+        
+        graphics.setColor(color);
+        int[] xPointsFH = {position.x + (size.width * 8 / 20), position.x + (size.width * 10 / 20), position.x + (size.width * 12 / 20)};
+        int[] yPointsFH = {position.y + (size.height * 1 / 20), position.y + (size.height * 3 / 20), position.y + (size.height * 1 / 20)};
+        graphics.fillPolygon(xPointsFH, yPointsFH, 3);
+        
+
+        int[] xPointsLC = {position.x + (size.width * 3 / 20), position.x + (size.width * 3 / 20), position.x + (size.width * 5 / 20)};
+        int[] yPointsLC = {position.y + (size.height * 11 / 20), position.y + (size.height * 15 / 20), position.y + (size.height * 13 / 20)};
+        graphics.fillPolygon(xPointsLC, yPointsLC, 3);
+        
+        int[] xPointsRC = {position.x + (size.width * 17 / 20), position.x + (size.width * 17 / 20), position.x + (size.width * 15 / 20)};
+        int[] yPointsRC = {position.y + (size.height * 11 / 20), position.y + (size.height * 15 / 20), position.y + (size.height * 13 / 20)};
+        graphics.fillPolygon(xPointsRC, yPointsRC, 3);
+        
+        
+    }
+    
     @Override
     public void paintEnvironment(Graphics graphics) {
+        drawHelmet(graphics, Color.RED, new Point(150, 50), new Dimension(200, 200));  
+        drawHelmet(graphics, Color.GREEN, new Point(350, 50), new Dimension(40, 40));
+        
         if (grid != null) {
             grid.paintComponent(graphics);
             graphics.drawString("SCORE: " + this.getScore(), 20, 20);
@@ -143,6 +181,7 @@ class SnakeEnvironment extends Environment {
             }
         }
     }
+ 
 
     private void checkSnakeIntersection() {
         // if the snake location is the same as an apple's location
