@@ -38,7 +38,11 @@ public class Snake {
                 newHead.y = getHead().y;
         }
         body.add(0, newHead);
-        body.remove(body.size()- 1);
+        if (growthCount > 0) {
+            growthCount--;
+        } else {
+            body.remove(body.size()- 1);
+        }
     }
 
     public Point getHead() {
@@ -91,6 +95,12 @@ public class Snake {
     public void setGrowthCount(int growthCount) {
         this.growthCount = growthCount;
     }
+    
+    public void grow(int growth) {
+        this.growthCount += growth;
+    }
 //</editor-fold>
+
+
 
 }

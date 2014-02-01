@@ -39,13 +39,15 @@ class SnakeEnvironment extends Environment {
     public void initializeEnvironment() {
         this.grid = new Grid();
         this.grid.getPosition().x = 50;
-        this.grid.getPosition().y = 400;
+        this.grid.getPosition().y = 50;
+        this.grid.setCellHeight(30);
+        this.grid.setCellWidth(30);
 
         this.grid.setColor(Color.black);
-        this.grid.setCellHeight(15);
-        this.grid.setCellWidth(15);
+//        this.grid.setCellHeight(15);
+//        this.grid.setCellWidth(15);
         this.grid.setColumns(40);
-        this.grid.setRows(40);
+        this.grid.setRows(21);
 
         this.apples = new ArrayList<Point>();
         for (int i = 0; i < APPLE_COUNT; i++) {
@@ -111,8 +113,8 @@ class SnakeEnvironment extends Environment {
 
        
     private void drawHelmet(Graphics graphics, Color color, Point position, Dimension size){
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(position.x, position.y, size.width, size.height);
+//        graphics.setColor(Color.WHITE);
+//        graphics.fillRect(position.x, position.y, size.width, size.height);
         
         //draw first part of faceplate
         graphics.setColor(color);
@@ -136,17 +138,28 @@ class SnakeEnvironment extends Environment {
         int[] yPointsLC = {position.y + (size.height * 11 / 20), position.y + (size.height * 15 / 20), position.y + (size.height * 13 / 20)};
         graphics.fillPolygon(xPointsLC, yPointsLC, 3);
         
+        //left cheek triangle
         int[] xPointsRC = {position.x + (size.width * 17 / 20), position.x + (size.width * 17 / 20), position.x + (size.width * 15 / 20)};
         int[] yPointsRC = {position.y + (size.height * 11 / 20), position.y + (size.height * 15 / 20), position.y + (size.height * 13 / 20)};
         graphics.fillPolygon(xPointsRC, yPointsRC, 3);
+        
+        graphics.setColor(Color.black);
+        int[] xPointsLE = {position.x + (size.width * 5 / 20), position.x + (size.width * 9 / 20), position.x + (size.width * 9 / 20)};
+        int[] yPointsLE = {position.y + (size.height * 12 / 20), position.y + (size.height * 12 / 20), position.y + (size.height * 14 / 20)};
+        graphics.fillPolygon(xPointsLE, yPointsLE, 3);
+        
+        int[] xPointsRE = {position.x + (size.width * 15 / 20), position.x + (size.width * 11 / 20), position.x + (size.width * 11 / 20)};
+        int[] yPointsRE = {position.y + (size.height * 12 / 20), position.y + (size.height * 12 / 20), position.y + (size.height * 14 / 20)};
+        graphics.fillPolygon(xPointsRE, yPointsRE, 3);
+         
         
         
     }
     
     @Override
     public void paintEnvironment(Graphics graphics) {
-        drawHelmet(graphics, Color.RED, new Point(150, 50), new Dimension(200, 200));  
-        drawHelmet(graphics, Color.GREEN, new Point(350, 50), new Dimension(40, 40));
+//        drawHelmet(graphics, Color.RED, new Point(150, 50), new Dimension(200, 200));  
+//        drawHelmet(graphics, Color.GREEN, new Point(350, 50), new Dimension(40, 40));
         
         if (grid != null) {
             grid.paintComponent(graphics);
@@ -157,17 +170,20 @@ class SnakeEnvironment extends Environment {
 
             if (this.apples != null) {
                 for (int i = 0; i < this.apples.size(); i++) {
-                    GraphicsPalette.drawApple(graphics, this.grid.getCellPosition(this.apples.get(i)), this.grid.getCellSize());
+//                    GraphicsPalette.drawApple(graphics, this.grid.getCellPosition(this.apples.get(i)), this.grid.getCellSize());
+                    cellLocation = grid.getCellPosition(this.apples.get(i));
+                    drawHelmet(graphics, Color.gray, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));           
                 }
             }
 
             Point celLocation;
 
-            graphics.setColor(Color.blue);
+            //graphics.setColor(Color.blue);
             if (snake != null) {
                 for (int i = 0; i < snake.getBody().size(); i++) {
                     cellLocation = grid.getCellPosition(snake.getBody().get(i));
-                    graphics.fillOval(cellLocation.x, cellLocation.y, this.grid.getCellWidth(), this.grid.getCellHeight());
+//                    graphics.fillOval(cellLocation.x, cellLocation.y, this.grid.getCellWidth(), this.grid.getCellHeight());
+                    drawHelmet(graphics, Color.BLUE, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));
 
                     if (this.poison != null) {
                         for (int i0 = 0; i0 < this.poison.size(); i++) {
@@ -193,6 +209,7 @@ class SnakeEnvironment extends Environment {
                 // move apple
                 this.apples.get(i).setLocation(getRandomGridLocation());
                 this.addScore(10);
+                snake.grow(1);
                 AudioPlayer.play("/resources/shotgun.wav");
             }
         }
