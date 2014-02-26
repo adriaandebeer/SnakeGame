@@ -7,6 +7,7 @@
 package snakegame;
 
 import environment.ApplicationStarter;
+import image.ResourceTools;
 
 /**
  *

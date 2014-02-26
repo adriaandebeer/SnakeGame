@@ -9,8 +9,10 @@ import audio.AudioPlayer;
 import environment.Environment;
 import environment.GraphicsPalette;
 import environment.Grid;
+import image.ResourceTools;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Adriaan D
+ * @author Jim the pixel donut
  */
 class SnakeEnvironment extends Environment {
 
@@ -28,7 +30,7 @@ class SnakeEnvironment extends Environment {
     private Point cellLocation;
     private ArrayList<Point> apples;
     private ArrayList<Point> poison;
-    private int defaultDelay = 2;
+    private int defaultDelay = 1;
     private int delay = defaultDelay;
     private int score = 0;
     private final int APPLE_COUNT = 4;
@@ -37,6 +39,8 @@ class SnakeEnvironment extends Environment {
 
     @Override
     public void initializeEnvironment() {
+        this.setBackground(ResourceTools.loadImageFromResource("resources/castle.gif"));
+
         this.grid = new Grid();
         this.grid.getPosition().x = 50;
         this.grid.getPosition().y = 50;
@@ -52,9 +56,16 @@ class SnakeEnvironment extends Environment {
         this.apples = new ArrayList<Point>();
         for (int i = 0; i < APPLE_COUNT; i++) {
             this.apples.add(getRandomGridLocation());
+
+            this.poison = new ArrayList<Point>();
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+
         }
-        
+
         this.snake = new Snake();
+        this.snake.setDirection(Direction.RIGHT);
         this.snake.getBody().add(new Point(5, 5));
         this.snake.getBody().add(new Point(4, 5));
         this.snake.getBody().add(new Point(4, 4));
@@ -63,7 +74,7 @@ class SnakeEnvironment extends Environment {
 
     private Point getRandomGridLocation() {
         return new Point((int) (Math.random() * this.grid.getColumns()),
-                         (int) (Math.random() * this.grid.getRows()));
+                (int) (Math.random() * this.grid.getRows()));
     }
 
     @Override
@@ -77,6 +88,11 @@ class SnakeEnvironment extends Environment {
                     checkSnakeIntersection();
                 } else {
                     delay--;
+                    if ((snake.selfHitTest())) {
+                        this.gameState = GameState.ENDED;
+                    } else {
+                    }
+
                 }
             }
         }
@@ -111,11 +127,10 @@ class SnakeEnvironment extends Environment {
     public void environmentMouseClicked(MouseEvent e) {
     }
 
-       
-    private void drawHelmet(Graphics graphics, Color color, Point position, Dimension size){
+    private void drawHelmet(Graphics graphics, Color color, Point position, Dimension size) {
 //        graphics.setColor(Color.WHITE);
 //        graphics.fillRect(position.x, position.y, size.width, size.height);
-        
+
         //draw first part of faceplate
         graphics.setColor(color);
         graphics.fillRect(position.x + (size.width * 3 / 20), position.y + (size.height * 1 / 20), (size.width * 14 / 20), (size.height * 14 / 20));
@@ -123,47 +138,47 @@ class SnakeEnvironment extends Environment {
         int[] xPoints = {position.x + (size.width * 3 / 20), position.x + (size.width * 10 / 20), position.x + (size.width * 17 / 20)};
         int[] yPoints = {position.y + (size.height * 15 / 20), position.y + (size.height * 20 / 20), position.y + (size.height * 15 / 20)};
         graphics.fillPolygon(xPoints, yPoints, 3);
-        
+
         graphics.setColor(Color.white);
         graphics.fillRect(position.x + (size.width * 8 / 20), position.y + (size.height * 1 / 20), size.width * 4 / 20, size.height * 11 / 20);
         graphics.fillRect(position.x + (size.width * 3 / 20), position.y + (size.height * 11 / 20), size.width * 14 / 20, size.height * 4 / 20);
-        
+
         graphics.setColor(color);
         int[] xPointsFH = {position.x + (size.width * 8 / 20), position.x + (size.width * 10 / 20), position.x + (size.width * 12 / 20)};
         int[] yPointsFH = {position.y + (size.height * 1 / 20), position.y + (size.height * 3 / 20), position.y + (size.height * 1 / 20)};
         graphics.fillPolygon(xPointsFH, yPointsFH, 3);
-        
 
         int[] xPointsLC = {position.x + (size.width * 3 / 20), position.x + (size.width * 3 / 20), position.x + (size.width * 5 / 20)};
         int[] yPointsLC = {position.y + (size.height * 11 / 20), position.y + (size.height * 15 / 20), position.y + (size.height * 13 / 20)};
         graphics.fillPolygon(xPointsLC, yPointsLC, 3);
-        
+
         //left cheek triangle
         int[] xPointsRC = {position.x + (size.width * 17 / 20), position.x + (size.width * 17 / 20), position.x + (size.width * 15 / 20)};
         int[] yPointsRC = {position.y + (size.height * 11 / 20), position.y + (size.height * 15 / 20), position.y + (size.height * 13 / 20)};
         graphics.fillPolygon(xPointsRC, yPointsRC, 3);
-        
+
         graphics.setColor(Color.black);
         int[] xPointsLE = {position.x + (size.width * 5 / 20), position.x + (size.width * 9 / 20), position.x + (size.width * 9 / 20)};
         int[] yPointsLE = {position.y + (size.height * 12 / 20), position.y + (size.height * 12 / 20), position.y + (size.height * 14 / 20)};
         graphics.fillPolygon(xPointsLE, yPointsLE, 3);
-        
+
         int[] xPointsRE = {position.x + (size.width * 15 / 20), position.x + (size.width * 11 / 20), position.x + (size.width * 11 / 20)};
         int[] yPointsRE = {position.y + (size.height * 12 / 20), position.y + (size.height * 12 / 20), position.y + (size.height * 14 / 20)};
         graphics.fillPolygon(xPointsRE, yPointsRE, 3);
-         
-        
-        
+
     }
-    
+
     @Override
     public void paintEnvironment(Graphics graphics) {
-//        drawHelmet(graphics, Color.RED, new Point(150, 50), new Dimension(200, 200));  
-//        drawHelmet(graphics, Color.GREEN, new Point(350, 50), new Dimension(40, 40));
-        
+
+        graphics.drawString(gameState.toString(), 100, 100);
+
         if (grid != null) {
+
             grid.paintComponent(graphics);
-            graphics.drawString("SCORE: " + this.getScore(), 20, 20);
+            graphics.setColor(Color.red);
+            graphics.setFont(new Font("Impact", Font.ITALIC, 50));
+            graphics.drawString("SCORE: " + this.getScore(), 20, 40);
             if (gameState == GameState.ENDED) {
 
             }
@@ -172,32 +187,37 @@ class SnakeEnvironment extends Environment {
                 for (int i = 0; i < this.apples.size(); i++) {
 //                    GraphicsPalette.drawApple(graphics, this.grid.getCellPosition(this.apples.get(i)), this.grid.getCellSize());
                     cellLocation = grid.getCellPosition(this.apples.get(i));
-                    drawHelmet(graphics, Color.gray, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));           
+                    drawHelmet(graphics, Color.gray, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));
+                }
+                if (this.gameState == GameState.ENDED) {
+                    graphics.drawString("GAME OVER NOOB", 300, 350);
                 }
             }
 
-            Point celLocation;
+            Point cellLocation;
 
             //graphics.setColor(Color.blue);
             if (snake != null) {
                 for (int i = 0; i < snake.getBody().size(); i++) {
                     cellLocation = grid.getCellPosition(snake.getBody().get(i));
-//                    graphics.fillOval(cellLocation.x, cellLocation.y, this.grid.getCellWidth(), this.grid.getCellHeight());
                     drawHelmet(graphics, Color.BLUE, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));
+                }
+            }
 
-                    if (this.poison != null) {
-                        for (int i0 = 0; i0 < this.poison.size(); i++) {
-                            this.poison.get(i);
-
-                        }
-
-                    }
+            if (this.poison != null) {
+                for (int i = 0; i < this.poison.size(); i++) {
+                    cellLocation = grid.getCellPosition(this.poison.get(i));
+                    drawHelmet(graphics, Color.RED, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));
 
                 }
+                if (this.poison.equals(snake.getHead().getLocation())) {
+                    
+
+                }
+
             }
         }
     }
- 
 
     private void checkSnakeIntersection() {
         // if the snake location is the same as an apple's location
@@ -228,7 +248,7 @@ class SnakeEnvironment extends Environment {
     public void setScore(int score) {
         this.score = score;
     }
-    
+
     /**
      * @param score the score to set
      */

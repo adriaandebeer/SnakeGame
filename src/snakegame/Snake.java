@@ -60,7 +60,16 @@ public class Snake {
     public ArrayList<Point> getBody() {
         return body;
     }
-
+      
+    public boolean selfHitTest(){
+        for (int i = 1; i < body.size(); i++) {
+            if (body.get(i).equals(getHead())) {
+                return true;
+            }
+        }
+        return false;
+    } 
+   
     /**
      * @param body the body to set
      */
