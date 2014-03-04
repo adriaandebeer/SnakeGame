@@ -30,7 +30,7 @@ class SnakeEnvironment extends Environment {
     private Point cellLocation;
     private ArrayList<Point> apples;
     private ArrayList<Point> poison;
-    private int defaultDelay = 1;
+    private int defaultDelay = 0;
     private int delay = defaultDelay;
     private int score = 0;
     private final int APPLE_COUNT = 4;
@@ -58,6 +58,19 @@ class SnakeEnvironment extends Environment {
             this.apples.add(getRandomGridLocation());
 
             this.poison = new ArrayList<Point>();
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
             this.poison.add(getRandomGridLocation());
             this.poison.add(getRandomGridLocation());
             this.poison.add(getRandomGridLocation());
