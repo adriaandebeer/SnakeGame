@@ -49,6 +49,13 @@ public class Snake {
         return body.get(0);
     }
 
+    void shrink(int removeCount) {
+        for (int i = 0; i < removeCount; i++) {
+            body.remove(body.size() - 1);
+        }
+    }
+
+    
     //<editor-fold defaultstate="collapsed" desc="Properties">
     private ArrayList<Point> body = new ArrayList<Point>();
     private Direction direction = Direction.LEFT;
@@ -109,6 +116,7 @@ public class Snake {
         this.growthCount += growth;
     }
 //</editor-fold>
+
 
 
 

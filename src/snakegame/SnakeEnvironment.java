@@ -39,7 +39,7 @@ class SnakeEnvironment extends Environment {
 
     @Override
     public void initializeEnvironment() {
-        this.setBackground(ResourceTools.loadImageFromResource("resources/castle.gif"));
+        this.setBackground(ResourceTools.loadImageFromResource("resources/thecastle.jpg"));
 
         this.grid = new Grid();
         this.grid.getPosition().x = 50;
@@ -61,7 +61,11 @@ class SnakeEnvironment extends Environment {
             this.poison.add(getRandomGridLocation());
             this.poison.add(getRandomGridLocation());
             this.poison.add(getRandomGridLocation());
-
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
+            this.poison.add(getRandomGridLocation());
         }
 
         this.snake = new Snake();
@@ -180,7 +184,8 @@ class SnakeEnvironment extends Environment {
             graphics.setFont(new Font("Impact", Font.ITALIC, 50));
             graphics.drawString("SCORE: " + this.getScore(), 20, 40);
             if (gameState == GameState.ENDED) {
-
+          
+                
             }
 
             if (this.apples != null) {
@@ -208,13 +213,16 @@ class SnakeEnvironment extends Environment {
                 for (int i = 0; i < this.poison.size(); i++) {
                     cellLocation = grid.getCellPosition(this.poison.get(i));
                     drawHelmet(graphics, Color.RED, cellLocation, new Dimension(this.grid.getCellWidth(), this.grid.getCellHeight()));
-
                 }
-                if (this.poison.equals(snake.getHead().getLocation())) {
+                if (this.gameState == gameState.PAUSED) {
+                    graphics.drawString("Press SPACE to Start", 300, 200);
+                }
+                if (this.gameState == gameState.WON){
+                    graphics.drawString("YOU ARE VICTORIOUS", 300, 200);
                     
-
                 }
-
+                
+    
             }
         }
     }
@@ -230,6 +238,16 @@ class SnakeEnvironment extends Environment {
                 this.apples.get(i).setLocation(getRandomGridLocation());
                 this.addScore(10);
                 snake.grow(1);
+                AudioPlayer.play("/resources/shotgun.wav");
+            }
+        }
+
+        for (int i = 0; i < this.poison.size(); i++) {
+            if (snake.getHead().equals(this.poison.get(i))) {
+                // move poison
+                this.poison.get(i).setLocation(getRandomGridLocation());
+                this.addScore(-20);
+                snake.shrink(1);
                 AudioPlayer.play("/resources/shotgun.wav");
             }
         }

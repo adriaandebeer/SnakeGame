@@ -11,6 +11,6 @@ package snakegame;
  * @author Adriaan D
  */
 public enum GameState {
-    RUNNING, PAUSED, ENDED, SNEEZED
+    RUNNING, PAUSED, ENDED, SNEEZED, WON
     
 }
